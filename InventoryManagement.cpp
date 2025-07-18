@@ -22,6 +22,24 @@ void addItem() {
             break;
         }
     }
+    while (true) {
+        cout << "Enter Quantity: ";
+        cin >> quantity;
+        if (quantity < 0) {
+            cout << "Quantity cannot be negative" << endl;
+        } else {
+            break;
+        }
+    }
+    while (true) {
+        cout << "Enter Price: ";
+        cin >> price;
+        if (price < 0) {
+            cout << "Price cannot be negative" << endl;
+        } else {
+            break;
+        }
+    }
 
     cout << "Enter Quantity: ";
     cin >> quantity;
