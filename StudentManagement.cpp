@@ -14,8 +14,15 @@ void addRecord() {
     cout << "Enter Student Name: ";
     cin.ignore(); //clear the input buffer
     getline(cin, name);
-    cout << "Enter Roll Number: ";
-    cin >> rollNo;
+    while (true) {
+        cout << "Enter Roll Number: ";
+        cin >> rollNo;
+        if (rollNo < 0) {
+            cout << "Roll no can not be negative"<<endl;
+        } else {
+            break;
+        }
+    }
     cout << "Enter Marks: ";
     cin >> marks;
     cout << "Enter Section: ";
