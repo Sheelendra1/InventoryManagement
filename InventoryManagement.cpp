@@ -41,10 +41,6 @@ void addItem() {
         }
     }
 
-    cout << "Enter Quantity: ";
-    cin >> quantity;
-    cout << "Enter Price: ";
-    cin >> price;
 
     ofstream file("Inventory.txt", ios::app);
     if (file.is_open()) {
