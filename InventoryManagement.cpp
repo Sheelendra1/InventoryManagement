@@ -132,8 +132,8 @@ int main() {
         cout << "Inventory Management System"<<endl;
         cout << "1. Add Item"<<endl;
         cout << "2. Display Items"<<endl;
-        cout << "4. Display Total Inventory Value"<<endl;
-        cout << "3. Exit"<<endl;
+        cout << "3. Display Total Inventory Value"<<endl;
+        cout << "4. Exit"<<endl;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -145,11 +145,11 @@ int main() {
                 displayItems();
                 break;
             case 3:
-                cout << "Exiting program..." << endl;
-                return 0;
-            case 4:
                 displayTotalInventoryValue();
                 break;
+            case 4:
+                cout << "Exiting program..." << endl;
+                return 0;
             default:
                 cout << "Invalid choice! Try again." << endl;
         }
