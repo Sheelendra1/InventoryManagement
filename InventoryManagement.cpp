@@ -3,6 +3,20 @@
 #include <string>
 using namespace std;
 
+bool isItemCodeExists(int itemCode) {
+    ifstream file("Inventory.txt");
+    string line;
+    while (getline(file, line)) {
+        size_t pos1 = line.find(",");
+        size_t pos2 = line.find(",", pos1 + 1);
+        int existingCode = stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
+        if (existingCode == itemCode) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void addItem() {
     string itemName;
     int itemCode;
@@ -12,16 +26,19 @@ void addItem() {
     cout << "Enter Item Name: ";
     cin.ignore();
     getline(cin, itemName);
-    
+
     while (true) {
         cout << "Enter Item Code: ";
         cin >> itemCode;
         if (itemCode < 0) {
             cout << "Item code cannot be negative" << endl;
+        } else if (isItemCodeExists(itemCode)) {
+            cout << "Error: Item code already exists. Enter a different one." << endl;
         } else {
             break;
         }
     }
+
     while (true) {
         cout << "Enter Quantity: ";
         cin >> quantity;
@@ -31,6 +48,7 @@ void addItem() {
             break;
         }
     }
+
     while (true) {
         cout << "Enter Price: ";
         cin >> price;
@@ -40,7 +58,6 @@ void addItem() {
             break;
         }
     }
-
 
     ofstream file("Inventory.txt", ios::app);
     if (file.is_open()) {
@@ -56,9 +73,10 @@ void displayItems() {
     string line;
     ifstream file("Inventory.txt");
     if (file.is_open()) {
-        cout << "Inventory Items: " << endl;
-        cout << "\tName\t\tCode\tQuantity\tPrice" << endl;
-        cout << "---------------------------------------------" << endl;
+        cout << "Inventory Items:"<<endl;
+        cout << "------------------------------------------------------------"<<endl;
+        cout << "No.\tName\t\tItem Code\tQty\tPrice\tTotal Price"<<endl;
+        cout << "------------------------------------------------------------"<<endl;
         int count = 1;
         while (getline(file, line)) {
             string name;
@@ -68,15 +86,40 @@ void displayItems() {
             size_t pos1 = line.find(",");
             size_t pos2 = line.find(",", pos1 + 1);
             size_t pos3 = line.find(",", pos2 + 1);
-            name = line.substr(0, pos1);
-            code = stoi(line.substr(pos1 + 1, pos2));
-            quantity = stoi(line.substr(pos2 + 1, pos3));
-            price = stof(line.substr(pos3 + 1));
 
-            cout << count << ". " << name << "\t\t" << code << "\t" << quantity << "\t\t" << price << endl;
+            name = line.substr(0, pos1);
+            code = stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
+            quantity = stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+            price = stof(line.substr(pos3 + 1));
+            float totalPrice = quantity * price;
+
+            cout << count << ".\t" << name << "\t\t" << code << "\t" << quantity << "\t" << price << "\t" << totalPrice << endl;
             count++;
         }
         file.close();
+    } else {
+        cout << "Error opening file" << endl;
+    }
+}
+
+void displayTotalInventoryValue() {
+    ifstream file("Inventory.txt");
+    string line;
+    float grandTotal = 0;
+
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            size_t pos1 = line.find(",");
+            size_t pos2 = line.find(",", pos1 + 1);
+            size_t pos3 = line.find(",", pos2 + 1);
+
+            int quantity = stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+            float price = stof(line.substr(pos3 + 1));
+
+            grandTotal += quantity * price;
+        }
+        file.close();
+        cout << "Total Inventory Value: " << grandTotal << endl;
     } else {
         cout << "Error opening file" << endl;
     }
@@ -86,10 +129,11 @@ int main() {
     int choice;
 
     while (1) {
-        cout << "Inventory Management System" << endl;
-        cout << "1. Add Item" << endl;
-        cout << "2. Display Items" << endl;
-        cout << "3. Exit" << endl;
+        cout << "Inventory Management System"<<endl;
+        cout << "1. Add Item"<<endl;
+        cout << "2. Display Items"<<endl;
+        cout << "4. Display Total Inventory Value"<<endl;
+        cout << "3. Exit"<<endl;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -103,6 +147,9 @@ int main() {
             case 3:
                 cout << "Exiting program..." << endl;
                 return 0;
+            case 4:
+                displayTotalInventoryValue();
+                break;
             default:
                 cout << "Invalid choice! Try again." << endl;
         }
